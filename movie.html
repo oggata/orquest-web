@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+
+
+.vjs-controls-disabled{
+    display: none !important;
+}
+    </style>
+
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+$(function() {
+
+/*
+var player = videojs('video-id', {
+  controlBar: {
+    muteToggle: false
+  }
+});
+*/
+
+
+
+    var options = {
+        id: 76979871, // VimeoのID
+        autoplay: true, // 自動再生
+        loop: false, // ループ
+        color: 'ff0000', // プレーヤーのカラー
+        byline: false, // 投稿者部分の表示
+        portrait: false, // 左上のVimeoのマークの表示
+        title: false, // タイトルの表示
+        seekbar:false,
+        control:false,
+        controls: false,
+        controlBar: {
+          muteToggle: false
+        }
+    };
+    var player = new Vimeo.Player($('#sample'), options);
+ 
+
+if(!player.controls()){
+    player.controlsBar.el().className = v.controlBar.el().className + " vjs-controls-disabled";
+}
+ /*
+    // 読み込み
+    player.on('loaded', function(data) {
+        console.log('読み込み', data);
+    });
+ 
+    // 再生した時
+    player.on('play', function(data) {
+        console.log('再生', data);
+    });
+ 
+    // 一時停止した時
+    player.on('pause', function(data) {
+        console.log('一時停止', data);
+    });
+ 
+    // 最後まで再生した時
+    player.on('ended', function(data) {
+        console.log('再生終了', data);
+    });
+ 
+    // シークした時
+    player.on('seeked', function(data) {
+        console.log('シーク', data);
+    });
+
+    // 動画の長さ
+    player.getDuration().then(function(duration) {
+        console.log('動画の長さ;', duration);
+    });
+ 
+    // 動画のタイトル
+    player.getVideoTitle().then(function(title) {
+        console.log('動画のタイトル;', title);
+    });
+ 
+    // 動画のID
+    player.getVideoId().then(function(id) {
+        console.log('動画のID;', id);
+    });
+ 
+    // 動画のURL
+    player.getVideoUrl().then(function(url) {
+        console.log('動画のURL;', url);
+    });
+ 
+    // 動画の字幕情報
+    player.getTextTracks().then(function(tracks) {
+        console.log('動画の字幕情報', tracks);
+    });
+*/
+});
+</script>
+
+  </head>
+  <body>
+
+<div id="sample"></div>
+
+
+
+
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.js"   integrity="sha256-5i/mQ300M779N2OVDrl16lbohwXNUdzL/R2aVUXyXWA="   crossorigin="anonymous"></script>
+    <script>
+        const socket = io();
+        $('form').submit(() => {
+            socket.emit('chat message', $('#m').val());
+            $('#m').val('');
+            return false;
+        });
+        socket.on('chat message', (msg) => {
+            $('#messages').append($('<li>').text(msg));
+        });
+    </script>
+
+  </body>
+</html>
