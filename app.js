@@ -16,6 +16,9 @@ var parent_user_id = 1;
 
 const PORT = process.env.PORT || 3000;
 
+app.get(`/test`, (req, res) => {
+  res.sendFile(__dirname + '/test.html');
+});
 app.get(`/movie`, (req, res) => {
   res.sendFile(__dirname + '/movie.html');
 });
