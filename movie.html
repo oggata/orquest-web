@@ -16,46 +16,46 @@
 .vjs-controls-disabled{
     display: none !important;
 }
-    </style>
 
+.video-wrap {
+  position: relative;
+  width: 100%;// デザインにより調整
+   &:before {
+    content: "";
+    display: block;
+    width: 100%;
+    padding-top: 56.25%;// =高さの比率（9） / 幅の比率（16） *100%　（※オリジナルの比率の場合は高さ　/　幅　*　100%）
+  }
+  #video01 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+    </style>
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
 $(function() {
-
-/*
-var player = videojs('video-id', {
-  controlBar: {
-    muteToggle: false
-  }
-});
-*/
-
-
-
     var options = {
-        id: 76979871, // VimeoのID
-        autoplay: true, // 自動再生
-        loop: false, // ループ
-        color: 'ff0000', // プレーヤーのカラー
-        byline: false, // 投稿者部分の表示
-        portrait: false, // 左上のVimeoのマークの表示
-        title: false, // タイトルの表示
-        seekbar:false,
-        control:false,
-        controls: false,
-        controlBar: {
-          muteToggle: false
-        }
+        id: 255853415, // VimeoのID
     };
     var player = new Vimeo.Player($('#sample'), options);
- 
 
+/*
+ player.on('play', function() {
+    console.log('再生中');
+});
+*/
+/*
 if(!player.controls()){
     player.controlsBar.el().className = v.controlBar.el().className + " vjs-controls-disabled";
-}
- /*
+}*/
+
+/*
     // 読み込み
     player.on('loaded', function(data) {
         console.log('読み込み', data);
@@ -106,14 +106,118 @@ if(!player.controls()){
         console.log('動画の字幕情報', tracks);
     });
 */
+
+
+        const socket = io();
+        //チャットで送信する
+        $('form').submit(() => {
+            socket.emit('chat message', $('#m').val());
+            $('#m').val('');
+            return false;
+        });
+        //ユーザIDを送る
+        var user_id = Math.floor( Math.random() * (999999 + 1 - 10) ) + 10 ;
+        socket.emit('init', user_id);
+        player.getVideoTitle().then(function(title) {
+            //console.log('動画のタイトル;', title);
+            socket.emit('chat message', title + "をみんなで楽しみましょう");
+        });
+/*
+        player.play().then(function() {
+            console.log('再生中');
+        }).catch(function(error) {
+            console.log(error);
+        });
+*/
+        //チャットの受信
+        socket.on('chat message', (msg) => {
+            //$('#messages').append($('<li>').text(msg));
+            $('#messages').prepend($('<li>').text(msg));
+        });
+
+        //タイムラインの受信
+        socket.on('parent_timeline_message', (msg) => {
+            //$('#messages').append($('<li>').text(msg));
+            //console.log(JSON.parse(msg));
+            console.log(msg);
+            if(user_id == msg.parent_user_id){
+                console.log("あなたは親です");
+            }else{
+                console.log("あなたは子です");
+
+                var _time = 0;
+                player.getCurrentTime().then(function(client_time) {
+                    //console.log(s);
+                    //_time = s;
+                    //socket.emit('timeline_message', _time);
+                    if(Math.abs(client_time - msg.time) >= 5){
+                        //3秒以上離れていたら合わせる
+                        console.log("遅れていたので併せました");
+                        player.setCurrentTime(msg.time).then(function(s) {
+                            //console.log(s);
+
+/*
+                            player.pause().then(function() {
+                            player.play().then(function() {
+                                console.log('再生中');
+                            }).catch(function(error) {
+                                console.log(error);
+                            });
+                            }).catch(function(error) {
+                                    console.log(error);
+                            });
+*/
+/*
+                            player.play().then(function() {
+                                console.log('再生中');
+                            }).catch(function(error) {
+                                console.log(error);
+                            }); 
+*/
+                        }).catch(function(error) {
+                            //console.log(error);
+                        });
+                    }
+                }).catch(function(error) {
+                    //console.log(error);
+                    //_time = 0
+                }); 
+
+
+            }
+        });
+
+        //現在再生中のタイムラインをサーバーに送る
+        var countup = function(){
+            var _time = 0;
+            player.getCurrentTime().then(function(s) {
+                console.log(s);
+                _time = s;
+                socket.emit('timeline_message', _time);
+            }).catch(function(error) {
+                console.log(error);
+                _time = 0
+            });
+        } 
+        setInterval(countup, 1000);
 });
 </script>
 
   </head>
   <body>
 
-<div id="sample"></div>
-
+<div id="sample" data-vimeo-autoplay="true"></div>
+<button id="play">play</button>
+<button id="pause">pause</button>
+<button id="getCurrentTime">getCurrentTime</button>
+<button id="setCurrentTime">setCurrentTime(10s)</button>
+<button id="getVolume">getVolume</button>
+<button id="setVolume">setVolume</button>
+<button id="getEnded">getEnded</button>
+<button id="getPaused">getPaused</button>
+<button id="enableTextTrack">enableTextTrack</button>
+<button id="disableTextTrack">disableTextTrack</button>
+<button id="getTextTracks">getTextTracks</button>
 
 
 
@@ -125,15 +229,14 @@ if(!player.controls()){
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.slim.js"   integrity="sha256-5i/mQ300M779N2OVDrl16lbohwXNUdzL/R2aVUXyXWA="   crossorigin="anonymous"></script>
     <script>
-        const socket = io();
-        $('form').submit(() => {
-            socket.emit('chat message', $('#m').val());
-            $('#m').val('');
-            return false;
-        });
-        socket.on('chat message', (msg) => {
-            $('#messages').append($('<li>').text(msg));
-        });
+
+
+
+
+
+
+        
+
     </script>
 
   </body>
