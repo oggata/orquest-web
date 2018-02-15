@@ -22,6 +22,9 @@ app.get(`/test`, (req, res) => {
 app.get(`/movie`, (req, res) => {
   res.sendFile(__dirname + '/movie.html');
 });
+app.get(`/movie2`, (req, res) => {
+  res.sendFile(__dirname + '/movie2.html');
+});
 app.get(`/`, (req, res) => {
   res.sendFile(__dirname + '/top.html');
 });

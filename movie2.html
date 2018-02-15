@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+
+
+.vjs-controls-disabled{
+    display: none !important;
+}
+
+.video-wrap {
+  position: relative;
+  width: 100%;// デザインにより調整
+   &:before {
+    content: "";
+    display: block;
+    width: 100%;
+    padding-top: 56.25%;// =高さの比率（9） / 幅の比率（16） *100%　（※オリジナルの比率の場合は高さ　/　幅　*　100%）
+  }
+  #video01 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+    </style>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+$(function() {
+    var options = {
+        id: 255853415, // VimeoのID
+    };
+    //var player = new Vimeo.Player($('#sample'), options);
+    var player = document.getElementById('video');
+    //player.currentTime = 30;
+    //player.autoplay = true;
+    //player.play();
+        const socket = io();
+        //チャットで送信する
+        $('form').submit(() => {
+            socket.emit('chat message', $('#m').val());
+            $('#m').val('');
+            return false;
+        });
+        //ユーザIDを送る
+        var user_id = Math.floor( Math.random() * (999999 + 1 - 10) ) + 10 ;
+        socket.emit('init', user_id);
+        //player.getVideoTitle().then(function(title) {
+            //console.log('動画のタイトル;', title);
+        //    socket.emit('chat message', title + "をみんなで楽しみましょう");
+        //});
+
+        //チャットの受信
+        socket.on('chat message', (msg) => {
+            //$('#messages').append($('<li>').text(msg));
+            $('#messages').prepend($('<li>').text(msg));
+        });
+
+        //タイムラインの受信
+        socket.on('parent_timeline_message', (msg) => {
+            //$('#messages').append($('<li>').text(msg));
+            //console.log(JSON.parse(msg));
+            console.log(msg);
+            if(user_id == msg.parent_user_id){
+                console.log("あなたは親です");
+            }else{
+                console.log("あなたは子です");
+
+
+
+
+                if(Math.abs(player.currentTime - msg.time) >= 5){
+                    //3秒以上離れていたら合わせる
+                    console.log("遅れていたので併せました");
+                    player.currentTime = msg.time;
+                }
+/*
+                player.getCurrentTime().then(function(client_time) {
+                    //console.log(s);
+                    //_time = s;
+                    //socket.emit('timeline_message', _time);
+                    if(Math.abs(client_time - msg.time) >= 5){
+                        //3秒以上離れていたら合わせる
+                        console.log("遅れていたので併せました");
+
+                        //player.setCurrentTime(msg.time).then(function(s) {
+                            //console.log(s);
+                        //}).catch(function(error) {
+                            //console.log(error);
+                        //});
+                        //player.currentTime = msg.time;
+                    }
+                }).catch(function(error) {
+                    //console.log(error);
+                    //_time = 0
+                }); 
+*/
+
+
+            }
+        });
+
+        //現在再生中のタイムラインをサーバーに送る
+        var countup = function(){
+            var _time = 0;
+            console.log("cu");
+
+
+//console.log(player.currentTime);
+socket.emit('timeline_message', player.currentTime);
+
+            //player.getCurrentTime().then(function(s) {
+            //    console.log(s);
+            //    _time = s;
+            //    socket.emit('timeline_message', _time);
+            //}).catch(function(error) {
+            //    console.log(error);
+            //    _time = 0
+            //});
+        } 
+        setInterval(countup, 1000);
+});
+</script>
+
+  </head>
+  <body>
+
+
+
+<video id="video" controls width="640" playsinline>
+<source src="./mp4/saosimai.mp4">
+</video>
+
+
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.js"   integrity="sha256-5i/mQ300M779N2OVDrl16lbohwXNUdzL/R2aVUXyXWA="   crossorigin="anonymous"></script>
+    <script>
+
+
+        
+
+    </script>
+
+  </body>
+</html>
