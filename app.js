@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
 		console.log('disconnect' + socket.id);
 		for (var i = 0; i < user2socket_array.length; i++) {
 			if(user2socket_array[i].socket_id == socket.id){
-				io.emit('chat message', user_id + "さんが入室しました.(現在:" + user2socket_array.length  + "人/親:" + user2socket_array[0].user_id + ")");
+				io.emit('chat message', user_id + "さんが退室しました.(現在:" + user2socket_array.length  + "人/親:" + user2socket_array[0].user_id + ")");
 				//io.emit('chat message', user2socket_array[i].user_id + "さんが退室しました");
 				//io.emit('chat message', "現在の人数は" + user2socket_array.length + "人です.");
 				//io.emit('chat message', "親は" + user2socket_array[0].user_id + "です");
