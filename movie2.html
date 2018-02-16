@@ -11,136 +11,291 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+    
 
-
-.vjs-controls-disabled{
-    display: none !important;
+.wrapper {
+  position: relative;  //横幅がウィンドウズサイズの縦幅よりもはみ出てしまう場合に、左にずらすために指定。
+  width: 100%; // 横幅もいっぱいに。
 }
 
-.video-wrap {
-  position: relative;
-  width: 100%;// デザインにより調整
-   &:before {
-    content: "";
-    display: block;
-    width: 100%;
-    padding-top: 56.25%;// =高さの比率（9） / 幅の比率（16） *100%　（※オリジナルの比率の場合は高さ　/　幅　*　100%）
+#video {
+  background: url('/video_bg.jpg') no-repeat; // 動画が再生を始めるまで、cssのほうでも背景を設定します。
+  background-attachment: fixed; // 中央揃えになるように、fixed。
+  background-position: center center; // positionも中央に。
+  background-size: cover; // 画面サイズに応じてサイズを可変するように設定。
+  left: 0;
+  // 以下、画面いっぱいにするためのCSS設定
+  min-width: 100%;
+  min-width: 100vw;
+  // wrapperのサイズに応じて、leftの位置をjQueryで指定するため、positionはabsoluteにします。
+  position: absolute;
+  top: 0;
+  // z-indexは調整してください。
+  z-index: 1;
+}
+
+
+body {
+ background: #f4f4f4;
+}
+/*Navbar Css*/
+.navbar{
+  min-height: 33px !important;
+  margin-bottom:0;
+  border-radius:0;
+}
+.navbar-nav > li > a, .navbar-brand {
+  padding-top:6px !important;
+  padding-bottom:0 !important;
+  height: 33px;
+}
+
+.navbar-default {
+  background-color: #370852;
+  border-color: #a177b2;
+}
+.navbar-default .navbar-brand {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #ecdbff;
+}
+.navbar-default .navbar-text {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #ecdbff;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #ecdbff;
+  background-color: #a177b2;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #ecdbff;
+  background-color: #a177b2;
+}
+.navbar-default .navbar-toggle {
+  border-color: #a177b2;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #a177b2;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ecf0f1;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ecf0f1;
+}
+.navbar-default .navbar-link {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-link:hover {
+  color: #ecdbff;
+}
+
+.main-color-bg{
+ background-color: #370852 !important;
+  border-color: #a177b2 !important;
+  color: #ffffff !important;
+}
+
+#header{
+    background:#ded0ee;
+    color: #ffffff;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+#header .create{
+    padding-top: 20px;
+}
+
+.breadcrumb{
+    background:#cccccc;
+    color:#ded0ee;
+}
+.breadcrumb a{
+    color:#dedFFF;
+}
+
+/*progress bar*/
+
+.progress-bar{
+    background: #370852;
+    color:#ffffff;
+}
+
+.dash-box{
+text-align: center;
+}
+#login{
+    
+    margin-top:30px;
+}
+
+/*# footer-------- */
+
+#footer{
+    background:#370852;
+    color:#ffffff;
+    text-align:center;
+    padding:30px;
+    margin-top:30px;    
+}
+
+/*# for mobile-------- */
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ecf0f1;
   }
-  #video01 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ecdbff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ecdbff;
+    background-color: #a177b2;
   }
 }
+
+
+  /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+    
+  .carousel-inner img {
+      width: 100%; /* Set width to 100% */
+      margin: auto;
+      min-height:200px;
+  }
+
+  /* Hide the carousel text when the screen is less than 600 pixels wide */
+  @media (max-width: 600px) {
+    .carousel-caption {
+      display: none; 
+    }
+  }
     </style>
-
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script src="https://player.vimeo.com/api/player.js"></script>
-<script>
-$(function() {
-    var options = {
-        id: 255853415, // VimeoのID
-    };
-    //var player = new Vimeo.Player($('#sample'), options);
-    var player = document.getElementById('video');
-    //player.currentTime = 30;
-    //player.autoplay = true;
-    //player.play();
-        const socket = io();
-        //チャットで送信する
-        $('form').submit(() => {
-            socket.emit('chat message', $('#m').val());
-            $('#m').val('');
-            return false;
-        });
-        //ユーザIDを送る
-        var user_id = Math.floor( Math.random() * (999999 + 1 - 10) ) + 10 ;
-        socket.emit('init', user_id);
-        //player.getVideoTitle().then(function(title) {
-            //console.log('動画のタイトル;', title);
-        //    socket.emit('chat message', title + "をみんなで楽しみましょう");
-        //});
-
-        //チャットの受信
-        socket.on('chat message', (msg) => {
-            //$('#messages').append($('<li>').text(msg));
-            $('#messages').prepend($('<li>').text(msg));
-        });
-
-        //タイムラインの受信
-        socket.on('parent_timeline_message', (msg) => {
-            //$('#messages').append($('<li>').text(msg));
-            //console.log(JSON.parse(msg));
-            console.log(msg);
-            if(user_id == msg.parent_user_id){
-                console.log("あなたは親です");
-            }else{
-                console.log("あなたは子です");
-
-
-
-
-                if(Math.abs(player.currentTime - msg.time) >= 5){
-                    //3秒以上離れていたら合わせる
-                    console.log("遅れていたので併せました");
-                    player.currentTime = msg.time;
-                }
-/*
-                player.getCurrentTime().then(function(client_time) {
-                    //console.log(s);
-                    //_time = s;
-                    //socket.emit('timeline_message', _time);
-                    if(Math.abs(client_time - msg.time) >= 5){
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    <script>
+        $(function () {
+            var player = document.getElementById('video');
+            const socket = io();
+            //チャットで送信する
+            $('form').submit(() => {
+                socket.emit('chat message', $('#m').val());
+                $('#m').val('');
+                return false;
+            });
+            //ユーザIDを送る
+            var user_id = Math.floor(Math.random() * (999999 + 1 - 10)) + 10;
+            socket.emit('init', user_id);
+            //チャットの受信
+            socket.on('chat message', (msg) => {
+                //$('#messages').append($('<li>').text(msg));
+                $('#messages').prepend($('<li>').text(msg));
+            });
+            //タイムラインの受信
+            socket.on('parent_timeline_message', (msg) => {
+                if (user_id == msg.parent_user_id) {
+                    //console.log("あなたは親です");
+                } else {
+                    //console.log("あなたは子です");
+                    if (Math.abs(player.currentTime - msg.time) >= 5) {
                         //3秒以上離れていたら合わせる
                         console.log("遅れていたので併せました");
-
-                        //player.setCurrentTime(msg.time).then(function(s) {
-                            //console.log(s);
-                        //}).catch(function(error) {
-                            //console.log(error);
-                        //});
-                        //player.currentTime = msg.time;
+                        player.currentTime = msg.time;
                     }
-                }).catch(function(error) {
-                    //console.log(error);
-                    //_time = 0
-                }); 
-*/
-
-
+                }
+            });
+            //現在再生中のタイムラインをサーバーに送る
+            var countup = function () {
+                socket.emit('timeline_message', player.currentTime);
             }
+            setInterval(countup, 1000);
         });
-
-        //現在再生中のタイムラインをサーバーに送る
-        var countup = function(){
-            var _time = 0;
-            console.log("cu");
-
-
-//console.log(player.currentTime);
-socket.emit('timeline_message', player.currentTime);
-
-            //player.getCurrentTime().then(function(s) {
-            //    console.log(s);
-            //    _time = s;
-            //    socket.emit('timeline_message', _time);
-            //}).catch(function(error) {
-            //    console.log(error);
-            //    _time = 0
-            //});
-        } 
-        setInterval(countup, 1000);
-});
-</script>
-
+    </script>
   </head>
   <body>
 
 
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
 
-<video id="video" controls width="640" playsinline>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">ORQUEST</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+       <li><a href="index.html"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Dashboard</a></li>
+            <li class="active"><a href="pages.html"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Pages</a></li>
+            <li><a href="posts.html"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Posts</a></li>
+            <li><a href="users.html"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Users</a></li>
+            <li><a href="stats.html"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Stats</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Messages <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>  Web Design</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>  Garaphic Design</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>  CMS</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>  Related News</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>  Donate</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Permissions</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Admin<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Settings</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="login.html"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<video id="video" controls playsinline>
 <source src="./mp4/saosimai.mp4">
 </video>
 
